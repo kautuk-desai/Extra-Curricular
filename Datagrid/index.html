@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Datagrid POC</title>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.css">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="dataTables.bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/fixedcolumns/3.2.2/css/fixedColumns.dataTables.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/colreorder/1.3.3/css/colReorder.bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-treegrid/0.2.0/css/jquery.treegrid.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.3.1/css/buttons.dataTables.min.css">
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.5.0/jquery.contextMenu.css">
+    <style type="text/css">
+    html,
+    body {
+        height: 100%;
+    }
+    
+    .height-100p {
+        height: 100%;
+    }
+    
+    .height-50p {
+        height: 50%;
+    }
+    
+    .separator-mrgntop {
+        margin-top: 1%;
+    }
+    
+    th,
+    td {
+        white-space: nowrap;
+    }
+    
+    .column-filter,
+    .hierarchy-column-filter {
+        outline: 1px solid #ddd !important;
+        border-bottom: 0px solid #ddd !important; /*  1px solid #ddd !important; */
+    }
+    
+    .dataTables_scrollBody table thead tr:first-child {
+        display: none;
+    }
+    
+    .dg-deleteable-row td:first-child {
+        cursor: pointer;
+    }
+    
+    .dg-deleteable-row.selected {
+        background-color: #acbad4;
+    }
+    
+    .cell-editing {
+        border-bottom: 1px solid #47a3da !important;
+        outline: none;
+    }
+    
+    .cell-edited {
+        border: 1px solid indianred !important;
+    }
+    
+    [dg-datatype="num"] {
+        text-align: right;
+        padding-right: 20px !important;
+    }
+    /*.datagrid-container:first-child .dataTables_wrapper {
+        display: none;
+    }*/
+    
+    .right-align {
+        text-align: right;
+    }
+    
+    .dataTables_scrollBody::-webkit-scrollbar-track {
+        -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+        background-color: #F5F5F5;
+        border-radius: 10px;
+    }
+    
+    .dataTables_scrollBody::-webkit-scrollbar {
+        width: 7px;
+        background-color: #F5F5F5;
+    }
+    
+    .dataTables_scrollBody::-webkit-scrollbar-thumb {
+        background-color: #AAA;
+        border-radius: 10px;
+        background-image: -webkit-linear-gradient(90deg, rgba(0, 0, 0, .2) 25%, transparent 25%, transparent 50%, rgba(0, 0, 0, .2) 50%, rgba(0, 0, 0, .2) 75%, transparent 75%, transparent)
+    }
+    </style>
+</head>
+
+<body>
+    <div class="container-fluid height-100p">
+        <div class="datagrid-container height-50p col-sm-12">
+            <table id="gridWithHierarchy" class="separator-mrgntop table stripe row-border table-condensed table-bordered">
+                <thead>
+                    <tr>
+                        <th>Account</th>
+                        <th class="right-align">Date 1</th>
+                        <th class="right-align">Date 2</th>
+                        <th class="right-align">Date 3</th>
+                        <th class="right-align">Date 4</th>
+                        <th class="right-align">Date 5</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+        <div class="datagrid-container height-50p col-sm-12">
+            <table id="gridWithoutHierarchy" class="separator-mrgntop table table-condensed table-bordered">
+                <thead>
+                    <tr>
+                        <th>Company Name</th>
+                        <th>Statement Date</th>
+                        <th class="right-align">IC $(M)</th>
+                        <th>Exit</th>
+                        <th class="right-align">TEV $(M)</th>
+                        <th class="right-align">EBITDA $(M)</th>
+                        <th>Multiple</th>
+                        <th>IRR</th>
+                        <th>MOIC</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.15/js/dataTables.bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/fixedcolumns/3.2.2/js/dataTables.fixedColumns.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/colreorder/1.3.3/js/dataTables.colReorder.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.3.1/js/buttons.colVis.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.3.1/js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-treegrid/0.2.0/js/jquery.treegrid.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.5.0/jquery.contextMenu.js"></script>
+    <script type="text/javascript" src="plugin2.js"></script>
+    <script type="text/javascript" src="index2.js"></script>
+</body>
+
+</html>
